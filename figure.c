@@ -1,7 +1,5 @@
 #include "figure.h"
 
-#define CH '#'
-
 void init_I(struct figure* f) {
   f->poses_count = 2;
   int y0 = f->p[0].y, x0 = f->p[0].x;
@@ -110,8 +108,10 @@ void init_figure(struct figure* f, enum TYPE t, int y0, int x0) {
 }
 
 void draw_figure(struct figure* f) {
+  cchar_t ch_w;
+  setcchar(&ch_w, L"", A_NORMAL, 0, NULL);
   for (int i = 0; i < 4; ++i) {
-    mvaddch(f->p[i].y, f->p[i].x, CH);
+    mvadd_wch(f->p[i].y, f->p[i].x, &ch_w);
   }
 }
 

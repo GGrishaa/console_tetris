@@ -1,5 +1,6 @@
 #ifndef FIGURE_H
 #define FIGURE_H
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <ncurses.h>
 

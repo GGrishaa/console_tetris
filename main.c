@@ -1,3 +1,4 @@
+#include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
@@ -12,6 +13,7 @@ int main() {
   noecho();
   curs_set(0);
   keypad(stdscr, true);
+  setlocale(LC_ALL, "");
 
   enum TYPE r = rand_type();
   struct figure f;
