@@ -4,7 +4,7 @@ LDFLAGS = -lncurses
 
 all: tetris run
 
-tetris: main.o figure.o
+tetris: main.o figure.o manipulate.o draw.o
 	$(GCC) $^ $(LDFLAGS) -o $@
 
 main.o: main.c figure.h
@@ -13,11 +13,17 @@ main.o: main.c figure.h
 figure.o: figure.c figure.h
 	$(GCC) $< -c $(CFLAGS) -o $@
 
+manipulate.o: manipulate.c manipulate.h figure.h
+	$(GCC) $< -c $(CFLAGS) -o $@
+
+draw.o: draw.c draw.h figure.h
+	$(GCC) $< -c $(CFLAGS) -o $@
+
 run: tetris
 	./tetris
 
 clean:
-	rm -f tetris figure.o main.o
+	rm -f tetris figure.o main.o draw.o manipulate.o
 	clear
 
 rebuild: clean all
