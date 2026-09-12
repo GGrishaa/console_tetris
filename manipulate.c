@@ -12,6 +12,10 @@ void move_down_figure(struct figure* f) {
   for (int i = 0; i < 4; ++i) f->p[i].y++;
 }
 
+void move_up_figure(struct figure* f) {
+  for (int i = 0; i < 4; ++i) f->p[i].y--;
+}
+
 void rotate_I_to0(struct figure* f) { init_I(f); }
 void rotate_I_to1(struct figure* f) {
   int y0 = f->p[0].y, x0 = f->p[0].x;
@@ -239,5 +243,11 @@ void rotate_figure(struct figure* f) {
     case Z:
       rotate_Z(f);
       break;
+  }
+}
+
+void figure_to_field(struct figure* f, struct field* fld) {
+  for (int k = 0; k < 4; ++k) {
+    fld->points[f->p[k].y][f->p[k].x - 1] = true;
   }
 }

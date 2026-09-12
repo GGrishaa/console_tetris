@@ -1,5 +1,9 @@
 #include "figure.h"
 
+#include "manipulate.h"
+
+int rand_type() { return rand() % 7 + 1; }
+
 void init_I(struct figure* f) {
   f->poses_count = 2;
   int y0 = f->p[0].y, x0 = f->p[0].x;
@@ -126,4 +130,53 @@ int max_down(struct figure* f) {
   for (int i = 0; i < 4; ++i)
     if (f->p[i].y > max) max = f->p[i].y;
   return max;
+}
+
+int can_be(struct figure* f, struct field* fld) {
+  bool ans = true;
+  for (int k = 0; k < 4; ++k) {
+    if (fld->points[f->p[k].y][f->p[k].x - 1]) ans = false;
+  }
+  return ans && max_right(f) <= 10 && max_left(f) >= 1 && max_down(f) <= 19;
+}
+
+int can_right(struct figure* f, struct field* fld) {
+  move_right_figure(f);
+  bool ans = can_be(f, fld);
+  move_left_figure(f);
+  return ans;
+}
+
+int can_left(struct figure* f, struct field* fld) {
+  move_left_figure(f);
+  bool ans = can_be(f, fld);
+  move_right_figure(f);
+  return ans;
+}
+
+int can_down(struct figure* f, struct field* fld) {
+  move_down_figure(f);
+  bool ans = can_be(f, fld);
+  move_up_figure(f);
+  return ans;
+}
+
+int can_rot(struct figure* f, struct field* fld) {
+  (void)fld;
+  if (f->type == O) return true;
+  bool res;
+  rotate_figure(f);
+  res = can_be(f, fld);
+  rotate_figure(f);
+  rotate_figure(f);
+  rotate_figure(f);
+  return res;
+}
+
+void init_field(struct field* f) {
+  for (int i = 0; i < 20; ++i) {
+    for (int j = 0; j < 10; ++j) {
+      f->points[i][j] = false;
+    }
+  }
 }

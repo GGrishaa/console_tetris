@@ -10,7 +10,7 @@ tetris: main.o figure.o manipulate.o draw.o
 main.o: main.c figure.h
 	$(GCC) $< -c $(CFLAGS) -o $@
 
-figure.o: figure.c figure.h
+figure.o: figure.c figure.h manipulate.h
 	$(GCC) $< -c $(CFLAGS) -o $@
 
 manipulate.o: manipulate.c manipulate.h figure.h
