@@ -1,14 +1,17 @@
 #include "draw.h"
 
 void draw_figure(struct figure* f) {
+  attron(COLOR_PAIR(1));
   cchar_t ch_w;
   setcchar(&ch_w, L"", A_NORMAL, 0, NULL);
   for (int i = 0; i < 4; ++i) {
     mvadd_wch(f->p[i].y, f->p[i].x, &ch_w);
   }
+  attroff(COLOR_PAIR(1));
 }
 
-void draw_field(struct figure* f, struct figure* next, struct field* fld) {
+void draw_field(struct figure* f, struct figure* next, struct field* fld,
+                int* score) {
   cchar_t ch_w;
   setcchar(&ch_w, L"", A_NORMAL, 0, NULL);
   for (int i = 0; i < 21; ++i) {
@@ -20,6 +23,8 @@ void draw_field(struct figure* f, struct figure* next, struct field* fld) {
   }
 
   mvprintw(13, 15, "next:");
+  mvprintw(0, 15, "score:");
+  mvprintw(1, 15, "%d", *score);
   draw_figure(f);
   draw_figure(next);
   for (int i = 0; i < 20; ++i) {
@@ -38,7 +43,7 @@ void spawn_figure(struct figure* cur, struct figure* next, enum TYPE* r,
 }
 
 void initialization(struct figure* f, struct figure* next, struct field* fld,
-                    enum TYPE* r, enum TYPE* r2) {
+                    enum TYPE* r, enum TYPE* r2, int* score) {
   srand(time(NULL));
   initscr();
   noecho();
@@ -47,9 +52,12 @@ void initialization(struct figure* f, struct figure* next, struct field* fld,
   setlocale(LC_ALL, "");
   *r = rand_type();
   *r2 = rand_type();
+  *score = 0;
   init_field(fld);
   spawn_figure(f, next, r, r2);
-  draw_field(f, next, fld);
+  draw_field(f, next, fld, score);
+  start_color();
+  init_pair(1, COLOR_GREEN, COLOR_BLACK);
 }
 
 void remove_line(struct field* fld, int n) {
@@ -63,12 +71,30 @@ void remove_line(struct field* fld, int n) {
   }
 }
 
-void check_lines(struct field* fld) {
+void check_lines(struct field* fld, int* score) {
+  int c = 0;
   for (int j = 0; j < 20; ++j) {
     int filled = true;
     for (int i = 0; filled && i < 10; ++i) {
       filled = fld->points[j][i];
     }
-    if (filled) remove_line(fld, j);
+    if (filled) {
+      remove_line(fld, j);
+      ++c;
+    }
+  }
+  switch (c) {
+    case 1:
+      *score += 100;
+      break;
+    case 2:
+      *score += 250;
+      break;
+    case 3:
+      *score += 400;
+      break;
+    case 4:
+      *score += 600;
+      break;
   }
 }

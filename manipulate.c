@@ -16,6 +16,13 @@ void move_up_figure(struct figure* f) {
   for (int i = 0; i < 4; ++i) f->p[i].y--;
 }
 
+void extra_move_down(struct figure* f, struct field* fld) {
+  do {
+    move_down_figure(f);
+  } while (can_be(f, fld));
+  move_up_figure(f);
+}
+
 void rotate_I_to0(struct figure* f) { init_I(f); }
 void rotate_I_to1(struct figure* f) {
   int y0 = f->p[0].y, x0 = f->p[0].x;

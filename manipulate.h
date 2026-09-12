@@ -9,6 +9,7 @@ void move_left_figure(struct figure* f);
 void move_right_figure(struct figure* f);
 void move_down_figure(struct figure* f);
 void move_up_figure(struct figure* f);
+void extra_move_down(struct figure* f, struct field* fld);
 
 void rotate_I_to0(struct figure* f);
 void rotate_I_to1(struct figure* f);
