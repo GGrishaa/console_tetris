@@ -28,13 +28,15 @@ void draw_field(struct figure* f, struct figure* next, struct field* fld,
   mvprintw(1, 16, "%d", *score);
   mvprintw(3, 15, "record:");
   mvprintw(4, 16, "%d", *record);
-  draw_figure(f);
-  draw_figure(next);
+  attron(COLOR_PAIR(2));
   for (int i = 0; i < 20; ++i) {
     for (int j = 0; j < 10; ++j) {
       if (fld->points[i][j]) mvadd_wch(i, j + 1, &ch_w);
     }
   }
+  attroff(COLOR_PAIR(2));
+  draw_figure(f);
+  draw_figure(next);
 }
 
 int spawn_figure(struct figure* cur, struct figure* next, struct field* fld,
@@ -56,6 +58,7 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   setlocale(LC_ALL, "");
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
+  init_pair(2, COLOR_CYAN, COLOR_BLACK);
   *score = 0;
   *record = 0;
   int fl = draw_welcome();
@@ -81,13 +84,13 @@ void denitialization(int* score, int* record) {
 }
 
 void remove_line(struct field* fld, int n) {
-  for (int i = 0; i < 10; ++i) {
-    fld->points[n][i] = false;
-  }
-  for (int j = n; j >= 0; --j) {
+  for (int j = n; j > 0; --j) {
     for (int i = 0; i < 10; ++i) {
       fld->points[j][i] = fld->points[j - 1][i];
     }
+  }
+  for (int i = 0; i < 10; ++i) {
+    fld->points[0][i] = false;
   }
 }
 

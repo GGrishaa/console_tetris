@@ -258,8 +258,6 @@ void figure_to_field(struct figure* f, struct field* fld) {
     int y = f->p[k].y;
     int x = f->p[k].x - 1;
 
-    if (y >= 0 && y < 20 && x >= 0 && x < 10) {
-      fld->points[y][x] = true;
-    }
+    if (y >= 0 && y < 20 && x >= 0 && x < 10) fld->points[y][x] = true;
   }
 }
