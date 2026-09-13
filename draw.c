@@ -11,7 +11,7 @@ void draw_figure(struct figure* f) {
 }
 
 void draw_field(struct figure* f, struct figure* next, struct field* fld,
-                int* score) {
+                int* score, int* record) {
   cchar_t ch_w;
   setcchar(&ch_w, L"", A_NORMAL, 0, NULL);
   for (int i = 0; i < 21; ++i) {
@@ -22,9 +22,12 @@ void draw_field(struct figure* f, struct figure* next, struct field* fld,
     mvaddch(20, j, '#');
   }
 
+  if (*score > *record) *record = *score;
   mvprintw(13, 15, "next:");
   mvprintw(0, 15, "score:");
-  mvprintw(1, 15, "%d", *score);
+  mvprintw(1, 16, "%d", *score);
+  mvprintw(3, 15, "record:");
+  mvprintw(4, 16, "%d", *record);
   draw_figure(f);
   draw_figure(next);
   for (int i = 0; i < 20; ++i) {
@@ -34,30 +37,49 @@ void draw_field(struct figure* f, struct figure* next, struct field* fld,
   }
 }
 
-void spawn_figure(struct figure* cur, struct figure* next, enum TYPE* r,
-                  enum TYPE* r2) {
+int spawn_figure(struct figure* cur, struct figure* next, struct field* fld,
+                 enum TYPE* r, enum TYPE* r2) {
   *r = *r2;
   *r2 = (enum TYPE)rand_type();
   init_figure(cur, *r, 0, 5);
   init_figure(next, *r2, 16, 17);
+  return can_be(cur, fld);
 }
 
-void initialization(struct figure* f, struct figure* next, struct field* fld,
-                    enum TYPE* r, enum TYPE* r2, int* score) {
+int initialization(struct figure* f, struct figure* next, struct field* fld,
+                   enum TYPE* r, enum TYPE* r2, int* score, int* record) {
   srand(time(NULL));
   initscr();
   noecho();
   curs_set(0);
   keypad(stdscr, true);
   setlocale(LC_ALL, "");
-  *r = rand_type();
-  *r2 = rand_type();
-  *score = 0;
-  init_field(fld);
-  spawn_figure(f, next, r, r2);
-  draw_field(f, next, fld, score);
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
+  int fl = draw_welcome();
+  if (fl) {
+    *r = rand_type();
+    *r2 = rand_type();
+    *score = 0;
+    FILE* file = fopen(RECORD_FILE, "r");
+    if (file == NULL)
+      *record = 0;
+    else
+      fscanf(file, "%d", record);
+    fclose(file);
+    init_field(fld);
+    spawn_figure(f, next, fld, r, r2);
+    draw_field(f, next, fld, score, record);
+  }
+  return fl;
+}
+
+void denitialization(int* score, int* record) {
+  draw_end(score, record);
+  endwin();
+  FILE* file = fopen(RECORD_FILE, "w");
+  fprintf(file, "%d", *record);
+  fclose(file);
 }
 
 void remove_line(struct field* fld, int n) {

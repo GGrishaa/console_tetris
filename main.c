@@ -10,44 +10,43 @@ int main() {
   enum TYPE r, r2;
   struct figure cur, next;
   struct field fld;
-  int c, score;
-  initialization(&cur, &next, &fld, &r, &r2, &score);
+  int c, score, record,
+      play = initialization(&cur, &next, &fld, &r, &r2, &score, &record);
 
-  while ((c = getch()) != 27) {
+  while (play && (c = getch()) != 27) {
     if (c == ' ') {
       clear();
       extra_move_down(&cur, &fld);
       figure_to_field(&cur, &fld);
       check_lines(&fld, &score);
-      spawn_figure(&cur, &next, &r, &r2);
+      play = spawn_figure(&cur, &next, &fld, &r, &r2);
       score += 10;
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_RIGHT && can_right(&cur, &fld)) {
       clear();
       move_right_figure(&cur);
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_LEFT && can_left(&cur, &fld)) {
       clear();
       move_left_figure(&cur);
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_DOWN && can_down(&cur, &fld)) {
       clear();
       move_down_figure(&cur);
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_DOWN && !can_down(&cur, &fld)) {
       clear();
       figure_to_field(&cur, &fld);
       check_lines(&fld, &score);
-      spawn_figure(&cur, &next, &r, &r2);
+      play = spawn_figure(&cur, &next, &fld, &r, &r2);
       score += 10;
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_UP && can_rot(&cur, &fld)) {
       clear();
       rotate_figure(&cur);
-      draw_field(&cur, &next, &fld, &score);
+      draw_field(&cur, &next, &fld, &score, &record);
     }
   }
-
-  endwin();
+  denitialization(&score, &record);
   return 0;
 }
