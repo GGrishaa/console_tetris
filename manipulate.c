@@ -255,6 +255,11 @@ void rotate_figure(struct figure* f) {
 
 void figure_to_field(struct figure* f, struct field* fld) {
   for (int k = 0; k < 4; ++k) {
-    fld->points[f->p[k].y][f->p[k].x - 1] = true;
+    int y = f->p[k].y;
+    int x = f->p[k].x - 1;
+
+    if (y >= 0 && y < 20 && x >= 0 && x < 10) {
+      fld->points[y][x] = true;
+    }
   }
 }

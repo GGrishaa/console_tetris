@@ -134,9 +134,16 @@ int max_down(struct figure* f) {
 
 int can_be(struct figure* f, struct field* fld) {
   bool ans = true;
+
   for (int k = 0; k < 4; ++k) {
-    if (f->p[k].y >= 0 && fld->points[f->p[k].y][f->p[k].x - 1]) ans = false;
+    int y = f->p[k].y;
+    int x = f->p[k].x - 1;
+
+    if (y >= 0 && y < 20 && x >= 0 && x < 10 && fld->points[y][x]) {
+      ans = false;
+    }
   }
+
   return ans && max_right(f) <= 10 && max_left(f) >= 1 && max_down(f) <= 19;
 }
 

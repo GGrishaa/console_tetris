@@ -56,16 +56,14 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   setlocale(LC_ALL, "");
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
+  *score = 0;
+  *record = 0;
   int fl = draw_welcome();
   if (fl) {
     *r = rand_type();
     *r2 = rand_type();
-    *score = 0;
     FILE* file = fopen(RECORD_FILE, "r");
-    if (file == NULL)
-      *record = 0;
-    else
-      fscanf(file, "%d", record);
+    if (file != NULL) fscanf(file, "%d", record);
     fclose(file);
     init_field(fld);
     spawn_figure(f, next, fld, r, r2);
@@ -86,7 +84,7 @@ void remove_line(struct field* fld, int n) {
   for (int i = 0; i < 10; ++i) {
     fld->points[n][i] = false;
   }
-  for (int j = n; j > 0; --j) {
+  for (int j = n; j >= 0; --j) {
     for (int i = 0; i < 10; ++i) {
       fld->points[j][i] = fld->points[j - 1][i];
     }
