@@ -55,6 +55,7 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   noecho();
   curs_set(0);
   keypad(stdscr, true);
+  timeout(30);
   setlocale(LC_ALL, "");
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);

@@ -19,7 +19,6 @@ int draw_welcome() {
 }
 
 void draw_end(int* sc, int* rec) {
-  getch();
   clear();
   mvprintw(0, 0, "___      _    _       _");
   mvprintw(1, 0, " |  |_| [_   [_ |\\ | | \\");
