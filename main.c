@@ -12,7 +12,7 @@ int main() {
   struct field fld;
   int c, score, record,
       play = initialization(&cur, &next, &fld, &r, &r2, &score, &record);
-  int is_played = play, cycles = 45, cycle = 0, final_cycles = 8;
+  int cycles = 45, cycle = 0, final_cycles = 8;
   while (play) {
     c = getch();
     if (c == ' ') {
@@ -20,10 +20,6 @@ int main() {
       if (cycles > final_cycles) --cycles;
       clear();
       extra_move_down(&cur, &fld);
-      figure_to_field(&cur, &fld);
-      check_lines(&fld, &score, &cycle, &final_cycles);
-      play = spawn_figure(&cur, &next, &fld, &r, &r2);
-      score += 10;
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_RIGHT && can_right(&cur, &fld)) {
       clear();
@@ -76,7 +72,6 @@ int main() {
     } else if (c == 27)
       break;
   }
-  (void)is_played;
   denitialization(&score, &record);
   return 0;
 }

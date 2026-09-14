@@ -31,5 +31,6 @@ void draw_end(int* sc, int* rec) {
   attron(COLOR_PAIR(1));
   mvprintw(6, 10, "%d", *rec);
   attroff(COLOR_PAIR(1));
+  timeout(10000);
   getch();
 }
