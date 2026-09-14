@@ -12,26 +12,27 @@ int main() {
   struct field fld;
   int c, score, record,
       play = initialization(&cur, &next, &fld, &r, &r2, &score, &record);
-  int is_played = play, cycles = 80, cycle = 0;
+  int is_played = play, cycles = 45, cycle = 0, final_cycles = 8;
   while (play) {
     c = getch();
     if (c == ' ') {
       cycle = 0;
+      if (cycles > final_cycles) --cycles;
       clear();
       extra_move_down(&cur, &fld);
       figure_to_field(&cur, &fld);
-      check_lines(&fld, &score);
+      check_lines(&fld, &score, &cycle, &final_cycles);
       play = spawn_figure(&cur, &next, &fld, &r, &r2);
       score += 10;
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_RIGHT && can_right(&cur, &fld)) {
-      cycle = 0;
       clear();
+      if (cycle) --cycle;
       move_right_figure(&cur);
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_LEFT && can_left(&cur, &fld)) {
-      cycle = 0;
       clear();
+      if (cycle) --cycle;
       move_left_figure(&cur);
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_DOWN && can_down(&cur, &fld)) {
@@ -41,15 +42,16 @@ int main() {
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_DOWN && !can_down(&cur, &fld)) {
       cycle = 0;
+      if (cycles > final_cycles) --cycles;
       clear();
       figure_to_field(&cur, &fld);
-      check_lines(&fld, &score);
+      check_lines(&fld, &score, &cycle, &final_cycles);
       play = spawn_figure(&cur, &next, &fld, &r, &r2);
       score += 10;
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_UP && can_rot(&cur, &fld)) {
-      cycle = 0;
       clear();
+      if (cycle) --cycle;
       rotate_figure(&cur);
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == ERR) {
@@ -62,15 +64,17 @@ int main() {
           clear();
           draw_field(&cur, &next, &fld, &score, &record);
         } else {
+          if (cycles > final_cycles) --cycles;
           clear();
           figure_to_field(&cur, &fld);
-          check_lines(&fld, &score);
+          check_lines(&fld, &score, &cycle, &final_cycles);
           play = spawn_figure(&cur, &next, &fld, &r, &r2);
           score += 10;
           draw_field(&cur, &next, &fld, &score, &record);
         }
       }
-    } else if (c == 27) break;
+    } else if (c == 27)
+      break;
   }
   (void)is_played;
   denitialization(&score, &record);

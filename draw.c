@@ -35,6 +35,11 @@ void draw_field(struct figure* f, struct figure* next, struct field* fld,
     }
   }
   attroff(COLOR_PAIR(2));
+  for (int i = 0; i < 20; ++i) {
+    for (int j = 0; j < 10; ++j) {
+      if (!fld->points[i][j]) mvaddch(i, j + 1, '.');
+    }
+  }
   draw_figure(f);
   draw_figure(next);
 }
@@ -95,7 +100,8 @@ void remove_line(struct field* fld, int n) {
   }
 }
 
-void check_lines(struct field* fld, int* score) {
+void check_lines(struct field* fld, int* score, int* cycles,
+                 int* final_cycles) {
   int c = 0;
   for (int j = 0; j < 20; ++j) {
     int filled = true;
@@ -120,5 +126,8 @@ void check_lines(struct field* fld, int* score) {
     case 4:
       *score += 600;
       break;
+  }
+  for (; c > 0; --c) {
+    if (*cycles > *final_cycles + 3) *cycles -= 3;
   }
 }

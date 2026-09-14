@@ -26,6 +26,6 @@ void denitialization(int* score, int* record);
 
 void remove_line(struct field* fld, int n);
 
-void check_lines(struct field* fld, int* score);
+void check_lines(struct field* fld, int* score, int* cycles, int* final_cycles);
 
 #endif
