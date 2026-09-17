@@ -67,18 +67,22 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   init_pair(2, COLOR_CYAN, COLOR_BLACK);
   *score = 0;
   *record = 0;
-  int fl = draw_welcome();
-  if (fl) {
+  int ans = draw_welcome();
+  while (ans != 's' && ans != 'q') {
+    draw_rules();
+    ans = draw_welcome();
+  }
+  FILE* file = fopen(RECORD_FILE, "r");
+  if (file == NULL || fscanf(file, "%d", record) != 1) *record = 0;
+  fclose(file);
+  if (ans == 's') {
     *r = rand_type();
     *r2 = rand_type();
-    FILE* file = fopen(RECORD_FILE, "r");
-    if (file != NULL) fscanf(file, "%d", record);
-    fclose(file);
     init_field(fld);
     spawn_figure(f, next, fld, r, r2);
     draw_field(f, next, fld, score, record);
   }
-  return fl;
+  return (ans == 's');
 }
 
 void denitialization(int* score, int* record) {
