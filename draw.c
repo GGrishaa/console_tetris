@@ -4,10 +4,13 @@ void draw_figure(struct figure* f) {
   attron(COLOR_PAIR(1));
   cchar_t ch_w;
   setcchar(&ch_w, L"", A_NORMAL, 0, NULL);
-  for (int i = 0; i < 4; ++i) {
+  for (int i = 1; i < 4; ++i) {
     mvadd_wch(f->p[i].y, f->p[i].x, &ch_w);
   }
   attroff(COLOR_PAIR(1));
+  attron(COLOR_PAIR(3));
+  mvadd_wch(f->p[0].y, f->p[0].x, &ch_w);
+  attroff(COLOR_PAIR(3));
 }
 
 void draw_field(struct figure* f, struct figure* next, struct field* fld,
@@ -65,6 +68,7 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   start_color();
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
   init_pair(2, COLOR_CYAN, COLOR_BLACK);
+  init_pair(3, COLOR_YELLOW, COLOR_BLACK);
   *score = 0;
   *record = 0;
   int ans = draw_welcome();

@@ -5,6 +5,7 @@
 
 int draw_welcome();
 void draw_rules();
+void draw_pause();
 void draw_end(int* sc, int* rec);
 
 #endif

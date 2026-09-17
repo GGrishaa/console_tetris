@@ -49,6 +49,14 @@ void draw_rules() {
   while (getch() != 'q');
 }
 
+void draw_pause() {
+  clear();
+  mvprintw(0, 0, "      _   _       _   _");
+  mvprintw(1, 0, "     [_) [_] | | (_  [_");
+  mvprintw(2, 0, "     [   [ ] \\_/  _) [_");
+  while (getch() != 'q');
+}
+
 void draw_end(int* sc, int* rec) {
   clear();
   mvprintw(0, 0, "___      _    _       _");

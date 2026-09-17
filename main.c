@@ -21,6 +21,9 @@ int main() {
       clear();
       extra_move_down(&cur, &fld);
       draw_field(&cur, &next, &fld, &score, &record);
+    } else if (c == 'p') {
+      draw_pause();
+      draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == KEY_RIGHT && can_right(&cur, &fld)) {
       clear();
       if (cycle) --cycle;
@@ -52,7 +55,6 @@ int main() {
       draw_field(&cur, &next, &fld, &score, &record);
     } else if (c == ERR) {
       ++cycle;
-      mvprintw(20, 20, "%d", cycle);
       if (cycle == cycles) {
         cycle = 0;
         if (can_down(&cur, &fld)) {
