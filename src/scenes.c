@@ -30,7 +30,8 @@ void draw_rules() {
   mvprintw(7, 0, "press \" \" to rotate figure");
   mvprintw(8, 0, "press \" \" to pause");
   mvprintw(9, 0, "press \"     \" to insta move figure down");
-  mvprintw(10, 0, "press \" \" to go back");
+  mvprintw(10, 0, "press \" \" to mute/unmute music (only in game)");
+  mvprintw(11, 0, "press \" \" to go back");
 
   cchar_t ch_w;
   attron(COLOR_PAIR(1));
@@ -44,7 +45,8 @@ void draw_rules() {
   mvadd_wch(7, 7, &ch_w);
   mvaddch(8, 7, 'p');
   mvprintw(9, 7, "SPACE");
-  mvaddch(10, 7, 'q');
+  mvaddch(10, 7, 'm');
+  mvaddch(11, 7, 'q');
   attroff(COLOR_PAIR(1));
   while (getch() != 'q');
 }
@@ -57,7 +59,7 @@ void draw_pause() {
   while (getch() != 'q');
 }
 
-void draw_end(int* sc, int* rec) {
+void draw_end(int* sc, int* rec, long long* seed) {
   clear();
   mvprintw(0, 0, "___      _    _       _");
   mvprintw(1, 0, " |  |_| [_   [_ |\\ | | \\");
@@ -70,6 +72,10 @@ void draw_end(int* sc, int* rec) {
   attron(COLOR_PAIR(1));
   mvprintw(6, 10, "%d", *rec);
   attroff(COLOR_PAIR(1));
-  mvprintw(7, 3, "press \"q\" to finish");
+  mvprintw(7, 8, "seed: (to use it paste into seed.txt)");
+  attron(COLOR_PAIR(1));
+  mvprintw(8, 10, "%lld", *seed);
+  attroff(COLOR_PAIR(1));
+  mvprintw(9, 3, "press \"q\" to finish");
   while (getch() != 'q');
 }

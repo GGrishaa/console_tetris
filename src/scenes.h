@@ -6,6 +6,6 @@
 int draw_welcome();
 void draw_rules();
 void draw_pause();
-void draw_end(int* sc, int* rec);
+void draw_end(int* sc, int* rec, long long* seed);
 
 #endif

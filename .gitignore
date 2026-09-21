@@ -1,4 +1,3 @@
 *.o
 src/.clang-format
 src/tetris
-src/record.txt

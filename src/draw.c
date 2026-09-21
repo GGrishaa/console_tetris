@@ -57,8 +57,9 @@ int spawn_figure(struct figure* cur, struct figure* next, struct field* fld,
 }
 
 int initialization(struct figure* f, struct figure* next, struct field* fld,
-                   enum TYPE* r, enum TYPE* r2, int* score, int* record) {
-  srand(time(NULL));
+                   enum TYPE* r, enum TYPE* r2, int* score, int* record,
+                   long long* seed) {
+  *seed = time(NULL);
   initscr();
   noecho();
   curs_set(0);
@@ -76,9 +77,14 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
     draw_rules();
     ans = draw_welcome();
   }
-  FILE* file = fopen(RECORD_FILE, "r");
-  if (file == NULL || fscanf(file, "%d", record) != 1) *record = 0;
-  fclose(file);
+  FILE* file1 = fopen(RECORD_FILE, "r");
+  if (file1 == NULL || fscanf(file1, "%d", record) != 1) *record = 0;
+  if (file1) fclose(file1);
+  long long temp;
+  FILE* file2 = fopen(SEED_FILE, "r");
+  if (file2 != NULL && fscanf(file2, "%lld", &temp) == 1) *seed = temp;
+  if (file2) fclose(file2);
+  srand(*seed);
   if (ans == 's') {
     *r = rand_type();
     *r2 = rand_type();
@@ -89,12 +95,14 @@ int initialization(struct figure* f, struct figure* next, struct field* fld,
   return (ans == 's');
 }
 
-void denitialization(int* score, int* record) {
-  draw_end(score, record);
+void denitialization(int* score, int* record, long long* seed) {
+  draw_end(score, record, seed);
   endwin();
-  FILE* file = fopen(RECORD_FILE, "w");
-  fprintf(file, "%d", *record);
-  fclose(file);
+  FILE* file1 = fopen(RECORD_FILE, "w");
+  fprintf(file1, "%d", *record);
+  fclose(file1);
+  FILE* file2 = fopen(SEED_FILE, "w");
+  fclose(file2);
 }
 
 void remove_line(struct field* fld, int n) {

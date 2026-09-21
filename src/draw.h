@@ -2,7 +2,8 @@
 #define DRAW_H
 
 #define _XOPEN_SOURCE_EXTENDED 1
-#define RECORD_FILE "record.txt"
+#define RECORD_FILE "../data/record.txt"
+#define SEED_FILE "../data/seed.txt"
 
 #include <locale.h>
 #include <ncurses.h>
@@ -20,9 +21,10 @@ int spawn_figure(struct figure* cur, struct figure* next, struct field* fld,
                  enum TYPE* r, enum TYPE* r2);
 
 int initialization(struct figure* f, struct figure* next, struct field* fld,
-                   enum TYPE* r, enum TYPE* r2, int* score, int* record);
+                   enum TYPE* r, enum TYPE* r2, int* score, int* record,
+                   long long* seed);
 
-void denitialization(int* score, int* record);
+void denitialization(int* score, int* record, long long* seed);
 
 void remove_line(struct field* fld, int n);
 

@@ -21,11 +21,12 @@ int main() {
   signal(SIGINT, on_signal);
   signal(SIGTERM, on_signal);
   enum TYPE r, r2;
+  long long seed;
   struct figure cur, next;
   struct field fld;
   int c, score, record,
-      play = initialization(&cur, &next, &fld, &r, &r2, &score, &record);
-  int cycles = 45, cycle = 0, final_cycles = 8;
+      play = initialization(&cur, &next, &fld, &r, &r2, &score, &record, &seed);
+  int cycles = 45, cycle = 0, final_cycles = 8, music_play = 1;
   while (play) {
     c = getch();
     if (c == ' ') {
@@ -84,10 +85,16 @@ int main() {
           draw_field(&cur, &next, &fld, &score, &record);
         }
       }
-    } else if (c == 27)
+    } else if (c == 'm') {
+      if (music_play)
+        music_stop();
+      else
+        music_start();
+      music_play = (music_play ? 0 : 1);
+    } else if (c == 'q')
       break;
   }
-  denitialization(&score, &record);
+  denitialization(&score, &record, &seed);
   music_stop();
   return 0;
 }
